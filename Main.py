@@ -99,8 +99,7 @@ if __name__ == "__main__":
     ml = MLEstimator(train)
     num_of_input = ml.get_word_freq(sys.argv[3])
     output_content += "Output11: " + str(num_of_input) + "\n"
-    validation_words = set(validation)
-    best_lamda, best_perplexity = find_best_lambda(validation_words, ml)
+    best_lamda, best_perplexity = find_best_lambda(validation, ml)
     print best_lamda, best_perplexity
-    output_content += output_twelve_to_twenty(ml, sys.argv[3], validation_words, best_lamda)
+    output_content += output_twelve_to_twenty(ml, sys.argv[3], validation, best_lamda)
     write_file(sys.argv[4], output_content)

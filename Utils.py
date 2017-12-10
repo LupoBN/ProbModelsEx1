@@ -5,6 +5,7 @@ def parse_no_title(lines, seperator):
     words= list()
     for i in range(2, len(lines), 4):
         parsed_line = lines[i].split(seperator)
+        parsed_line.remove("")
         for word in parsed_line:
             words.append(word)
     return words
