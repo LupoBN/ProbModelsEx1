@@ -2,6 +2,7 @@ import sys
 from Utils import *
 from LidstoneSmoother import LidstoneSmoother
 import math
+from HeldoutSmoother import HeldoutSmoother
 
 VOCAB_SIZE = 300000
 
@@ -83,11 +84,39 @@ def output_twelve_to_twenty(ml, input_word, validation, best_lamda):
     output_str += "Output20: " + str(perplixity) + "\n"
     return output_str
 
+def separate_data_heldout(words):
+    train_percent = int(round(0.5 * len(words)))
+    train_set = words[:train_percent]
+    heldout_set = words[train_percent:]
+    train_set = set(train_set)
+    heldout_set = set(heldout_set)
+    return train_set, heldout_set
 
+def output_21_to_28(words, ml, heldout_smoother):
+    output_str = str()
+    ls = LidstoneSmoother(ml, 0.06, VOCAB_SIZE)
+    train_set, heldout_set = separate_data_heldout(words)
+    output_str += "Output21: " + str(len(train_set)) + "\n"
+    output_str += "Output22: " + str(len(heldout_set)) + "\n"
+    output_str += "Output23: " + str(heldout_smoother.get_word_prob(sys.argv[3])) + "\n"
+    output_str += "Output24: " + str(heldout_smoother.get_word_prob("THISWORDCAN'TBEONTHEWORDLISTWHATAREYOUCRAZY?")) + "\n"
+    words = read_file(sys.argv[2], parse_no_title, " ")
+    # to check if it should be set or the whole test size
+    output_str += "Output25: " + str(len(set(words))) + "\n"
+    ls_perplexity = calculate_perplexity(ls, words)
+    ho_perplexity = calculate_perplexity(heldout_smoother, words)
+    better_model = 'L' if ls_perplexity < ho_perplexity else 'H'
+    output_str += "Output26: " + str(ls_perplexity) + "\n"
+    output_str += "Output27: " + str(ho_perplexity) + "\n"
+    output_str += "Output28: " + better_model + "\n"
+    return output_str
 
-
-
-
+def output_table(best_lambda, ml, heldout_smoother):
+    output_str = str()
+    ls = LidstoneSmoother(ml, best_lambda, VOCAB_SIZE)
+    for i in xrange(10):
+        output_str += str(i) + '\t' + str(heldout_smoother.N_dict[i]) + '\t' + str(heldout_smoother.t_dict[i]) + '\n'
+    return output_str
 
 if __name__ == "__main__":
     output_content = output_one_to_six()
@@ -102,4 +131,10 @@ if __name__ == "__main__":
     best_lamda, best_perplexity = find_best_lambda(validation, ml)
     print best_lamda, best_perplexity
     output_content += output_twelve_to_twenty(ml, sys.argv[3], validation, best_lamda)
+    train_percent = int(round(0.5 * len(words)))
+    train_set = words[:train_percent]
+    heldout_set = words[train_percent:]
+    heldout_smoother = HeldoutSmoother(train_set, heldout_set)
+    output_content += output_21_to_28(words, ml, heldout_smoother)
+    output_content += output_table(best_lamda, ml, heldout_smoother)
     write_file(sys.argv[4], output_content)
