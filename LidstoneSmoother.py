@@ -16,6 +16,11 @@ class LidstoneSmoother:
         word_freq = self._mle.get_word_freq(word)
         return (float(word_freq) + self._lamda) / (self._S + self._lamda * self._X)
 
+    def get_f(self, frequency):
+        prob_for_frequency = (frequency + self._lamda) / (self._S + self._lamda * self._X)
+        return self._S * prob_for_frequency
+
+
 
 def lidstone_prob_validity_test():
     words = read_file("develop.txt", parse_no_title, " ")

@@ -21,6 +21,12 @@ class HeldoutSmoother:
         N = self.get_N(r)
         return float(t) / (len(self.heldout) * N)
 
+    def get_f(self, frequency):
+        t = self.get_t(frequency)
+        N = self.get_N(frequency)
+        prob_for_frequency = float(t) / (len(self.heldout) * N)
+        return prob_for_frequency * len(self.train)
+
     # calculate t_r
     def get_t(self, r):
         if r in self.t_dict:

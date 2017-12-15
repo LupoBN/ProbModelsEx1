@@ -8,8 +8,9 @@ class MLEstimator:
         self._frequencies = Counter()
         self._frequencies.update(words)
         self._S = float((sum(self._frequencies.values())))
-        bigram = self._create_ngrams(words, 2)
-        self._frequencies.update(bigram)
+
+    def unique_words_count(self):
+        return self._words_count
 
     # Gets a list of words and a parameter n and returns a list of ngrams words according to the words list.
     def _create_ngrams(self, words, n):
@@ -79,4 +80,3 @@ def bigram_test():
 
 if __name__ == '__main__':
     unigram_test()
-    bigram_test()
