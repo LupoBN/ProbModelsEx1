@@ -95,8 +95,6 @@ def separate_data_heldout(words):
     train_percent = int(round(0.5 * len(words)))
     train_set = words[:train_percent]
     heldout_set = words[train_percent:]
-    train_set = set(train_set)
-    heldout_set = set(heldout_set)
     return train_set, heldout_set
 
 
@@ -111,8 +109,7 @@ def output_21_to_28(words, ml, heldout_smoother):
     output_str += "Output24 " + str(
         heldout_smoother.get_word_prob("THISWORDCAN'TBEONTHEWORDLISTWHATAREYOUCRAZY?")) + "\n"
     words = read_file(sys.argv[2], parse_no_title, " ")
-    # to check if it should be set or the whole test size
-    output_str += "Output25 " + str(len(set(words))) + "\n"
+    output_str += "Output25 " + str(len(words)) + "\n"
     ls_perplexity = calculate_perplexity(ls, words)
     ho_perplexity = calculate_perplexity(heldout_smoother, words)
     better_model = 'L' if ls_perplexity < ho_perplexity else 'H'
