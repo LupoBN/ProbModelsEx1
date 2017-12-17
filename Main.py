@@ -4,6 +4,9 @@ from LidstoneSmoother import LidstoneSmoother
 import math
 from HeldoutSmoother import HeldoutSmoother
 
+STUDENTS = "Matan Ben Noach Itay Mosafi 201120441 205790983\n"
+
+
 VOCAB_SIZE = 300000
 
 
@@ -131,7 +134,8 @@ def output_table(best_lambda, ml, heldout_smoother):
 
 
 if __name__ == "__main__":
-    output_content = output_one_to_six()
+    output_content = STUDENTS
+    output_content += output_one_to_six()
     words = read_file(sys.argv[1], parse_no_title, " ")
     ml = MLEstimator(words)
     output_content += "Output7 " + str(len(words)) + "\n"
